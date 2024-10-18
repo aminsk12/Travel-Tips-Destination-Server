@@ -7,8 +7,8 @@ export const socketServer = (server: HttpServer): void => {
     pingTimeout: 60000,
     cors: {
       origin: [
-        "http://localhost:3000",
-        "https://traveltipsdestinationcommunity.vercel.app",
+        "http://localhost:3000"
+        
       ],
       methods: ["GET", "POST"],
       credentials: true,
@@ -56,22 +56,21 @@ export const socketServer = (server: HttpServer): void => {
 
       // Broadcast the message to all users in the chat, except the sender
       chat.users.forEach((user: any) => {
-        if (user._id === newMessageReceived.sender._id) return; // Skip sender
+        if (user._id === newMessageReceived.sender._id) return;
 
-        socket.in(user._id).emit("message received", newMessageReceived); // Emit message to other users in chat
+        socket.in(user._id).emit("message received", newMessageReceived);
       });
     });
 
     // Handle disconnect
     socket.on("disconnect", () => {
       console.log("USER DISCONNECTED");
-      // Optional cleanup or session management can go here
     });
 
     // Handle setup cleanup (optional)
     socket.off("setup", () => {
       console.log("USER DISCONNECTED");
-      socket.leave([...socket.rooms][0]); // Leave first joined room
+      socket.leave([...socket.rooms][0]);
     });
   });
 };
